@@ -1,123 +1,115 @@
-/* Simple array sorting realization
- * 
- */
+import java.util.Arrays;
+
 public class ArrayUtils {
-	private static final int ARRAYSIZE=100000;
-	static private int[] array=new int[ARRAYSIZE+1];
-	private long switchCount=0, compareCount=0;
+	final private int ARRAYSIZE; 
+	final private int[] array;
+	long switchCount, compareCount;
 	
-	public void FillRandom() {
-		int count;
-		for (count=0;count<=ARRAYSIZE;count++) {
-			array[count]=(int)(Math.random()*100);
-		}
+	public ArrayUtils(int[] array) {
+		this.array = array;
+		this.ARRAYSIZE = array.length;     
 	}
-	
-	public void FillDecremental() {
-		for (int count=0;count<=ARRAYSIZE;count++) {
-			array[count]=ARRAYSIZE-count;
-		}
-	}
-
-	public void ShowArray() {
-		int count;
-		for (count=0;count<=ARRAYSIZE;count++) {
-			System.out.println(count+"	"+array[count]);
-		}
-	}
-
-	public void ShowResult(String message) {
-		System.out.println("=-=-= Total: arraySize:"+ARRAYSIZE+",	switch:"+switchCount+",	compare:"+compareCount+"	"+message);
-	}
-	
-	public void sortBubbleClassic(){
-		int currentPosition=0;
-		int maxPosition;
-		int temp;
-		switchCount=0;
-		compareCount=0;
-		
-		for (maxPosition=ARRAYSIZE;maxPosition>=0;maxPosition--)
-		{
-			for (currentPosition=0;currentPosition<maxPosition;currentPosition++)
-			{
-				compareCount++;
-				if (array[currentPosition] > array[currentPosition+1]){
-					temp=array[currentPosition];
-					array[currentPosition]=array[currentPosition+1];
-					array[currentPosition+1]=temp;
-					switchCount++;
-				}
-			}
-		}
-	}
-
-	public void sortBubbleAdvanced1(){
-		int currentPosition=0;
-		int maxPosition;
-		int temp;
-		switchCount=0;
-		compareCount=0;
-		boolean changed;
-		
-		for (maxPosition=ARRAYSIZE;maxPosition>=0;maxPosition--)
-		{
-			changed=false;
-			for (currentPosition=0;currentPosition<maxPosition;currentPosition++)
-			{
-				compareCount++;
-				if (array[currentPosition] > array[currentPosition+1]){
-					temp=array[currentPosition];
-					array[currentPosition]=array[currentPosition+1];
-					array[currentPosition+1]=temp;
-					switchCount++;
-					changed=true;
-				}
-			}
-			if (changed==false) { return; }
-		}
-	}
-	
-	public void sortBubbleAdvanced2(){
+ 
+	public void sortBubbleClassic() {
 		int currentPosition;
 		int maxPosition;
+		int temp;
+		switchCount=0;
+		compareCount=0;
+		long startTime = System.nanoTime();  
+  
+		for (maxPosition=ARRAYSIZE - 1; maxPosition >= 0;maxPosition--)
+		{
+			for (currentPosition=0;currentPosition<maxPosition;currentPosition++)
+			{
+				compareCount++;
+				if (array[currentPosition] > array[currentPosition+1]){
+					temp=array[currentPosition];
+					array[currentPosition]=array[currentPosition+1];
+					array[currentPosition+1]=temp;
+					switchCount++;
+				}
+			}
+		}
+		results(startTime);
+		assert(validate());
+		return;
+	}
+
+	public void sortBubbleAdvanced(){
+		int currentPosition;
+		int maxPosition;
+		int changedMaxPosition=ARRAYSIZE - 1;
 		int minPosition=0;
 		boolean changed;
 		int temp;
 		switchCount=0;
 		compareCount=0;
+		long startTime = System.nanoTime();
 		
-		for (maxPosition=ARRAYSIZE;maxPosition>=0;maxPosition--)
+		for (maxPosition = ARRAYSIZE - 1; maxPosition >= 0; minPosition++)
 		{
 			changed=false;
-			for (currentPosition=minPosition;currentPosition<maxPosition;currentPosition++)
+			for (currentPosition = minPosition; currentPosition < maxPosition; currentPosition++)
 			{
-				if (array[currentPosition] > array[minPosition]){
-					temp=array[minPosition];
-					array[minPosition]=array[currentPosition]=temp;
-					array[currentPosition]=temp;
-					switchCount++;
-					changed=true;
-				}
 				if (array[currentPosition] > array[currentPosition+1]){
-					temp=array[minPosition];
-					array[minPosition]=array[currentPosition]=temp;
+					temp=array[currentPosition+1];
+					array[currentPosition+1]=array[currentPosition];
 					array[currentPosition]=temp;
 					switchCount++;
 					changed=true;
+					changedMaxPosition=currentPosition;
 				}
-				if (array[currentPosition+1] > array[maxPosition]){
+				if (array[currentPosition] < array[minPosition]){
 					temp=array[minPosition];
-					array[minPosition]=array[currentPosition]=temp;
+					array[minPosition] = array[currentPosition];
+					array[currentPosition] = temp;
+					switchCount++;
+					changed=true;
+				}
+				if (array[currentPosition] > array[maxPosition]){
+					temp=array[maxPosition];
+					array[maxPosition]=array[currentPosition];
 					array[currentPosition]=temp;
 					switchCount++;
 					changed=true;
 				}
 				compareCount+=3;
 			}
-			if (changed==false) { return; }
-			minPosition++;
+			if (!changed) {
+				results(startTime);
+				assert(validate());
+				return;
+			}
+			compareCount++;
+			maxPosition=changedMaxPosition;
 		}
+		results(startTime);
+		assert(validate());
+		return;
+	}
+
+	boolean validate() 
+	{
+		int prev = array[0];
+		
+		for (int i = 1; i < array.length; i++) {
+			if (prev > array[i]) {
+				print();
+				return false;
+			}
+			prev=array[i];
+		}
+		return true;
+	}
+ 
+	void print() 
+	{
+		System.out.println(Arrays.toString(array));
+	}
+	
+	void results(long startTime)
+	{
+		System.out.println(String.format("Compares: %15d, Switches: %15d, Time: %, 12d",compareCount, switchCount, System.nanoTime()-startTime));
 	}
 }
-

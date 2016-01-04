@@ -132,9 +132,11 @@ public class ArrayUtils {
         int currentPosition = tempStartPosition - (tempStartPosition - tempLastPosition) / 2;
         while (tempStartPosition < tempLastPosition) {
             while (tempStartPosition < currentPosition && (array[tempStartPosition] <= array[currentPosition])) {
+            	compareCount++;
             	tempStartPosition++;
             }
             while (tempLastPosition > currentPosition && (array[currentPosition] <= array[tempLastPosition])) {
+            	compareCount++;
             	tempLastPosition--;
             }
             if (tempStartPosition < tempLastPosition) {
@@ -144,8 +146,10 @@ public class ArrayUtils {
                 switchCount++;
                 if (tempStartPosition == currentPosition)
                 	currentPosition = tempLastPosition;
-                else if (tempLastPosition == currentPosition)
+                else if (tempLastPosition == currentPosition){
                 	currentPosition = tempStartPosition;
+                	compareCount++;
+                }
                 compareCount++;
             }
             compareCount++;

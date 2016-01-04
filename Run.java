@@ -22,7 +22,7 @@ public class Run {
 
 	public static void main(String[] args)
 	{
-		int N = 100;
+		int N = 10000;
 		int random[] = new int[N+1];
 		int decremental[] = new int[N+1];
 		int incremental[] = new int[N+1];

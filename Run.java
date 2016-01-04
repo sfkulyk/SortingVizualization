@@ -40,7 +40,17 @@ public class Run {
 		bubbleClassic = new ArrayUtils(Arrays.copyOf(incremental,incremental.length));
 		bubbleClassic.sortBubbleClassic();
 
+		System.out.println("QuickSort");
+		ArrayUtils quickSort = new ArrayUtils(Arrays.copyOf(random,random.length));
+		quickSort.quickSort();      
+     
+		quickSort = new ArrayUtils(Arrays.copyOf(decremental,decremental.length));
+		quickSort.quickSort();     
+     
+		quickSort = new ArrayUtils(Arrays.copyOf(incremental,incremental.length));
+		quickSort.quickSort();
 
+		
 		System.out.println("Bubble Sorting Advanced");
 		ArrayUtils bubbleAdvanced = new ArrayUtils(Arrays.copyOf(random,random.length));
 		bubbleAdvanced.sortBubbleAdvanced();      

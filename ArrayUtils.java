@@ -10,6 +10,30 @@ public class ArrayUtils {
 		this.ARRAYSIZE = array.length;     
 	}
  
+	boolean validate() 
+	{
+		int prev = array[0];
+		
+		for (int i = 1; i < array.length; i++) {
+			if (prev > array[i]) {
+				print();
+				return false;
+			}
+			prev=array[i];
+		}
+		return true;
+	}
+ 
+	void print() 
+	{
+		System.out.println(Arrays.toString(array));
+	}
+	
+	void results(long startTime)
+	{
+		System.out.println(String.format("Compares: %15d, Switches: %15d, Time: %, 12d",compareCount, switchCount, System.nanoTime()-startTime));
+	}
+	
 	public void sortBubbleClassic() {
 		int currentPosition;
 		int maxPosition;
@@ -89,27 +113,44 @@ public class ArrayUtils {
 		return;
 	}
 
-	boolean validate() 
-	{
-		int prev = array[0];
-		
-		for (int i = 1; i < array.length; i++) {
-			if (prev > array[i]) {
-				print();
-				return false;
-			}
-			prev=array[i];
-		}
-		return true;
-	}
- 
-	void print() 
-	{
-		System.out.println(Arrays.toString(array));
-	}
 	
-	void results(long startTime)
-	{
-		System.out.println(String.format("Compares: %15d, Switches: %15d, Time: %, 12d",compareCount, switchCount, System.nanoTime()-startTime));
-	}
+    public void quickSort() {
+    	long startTime = System.nanoTime();
+		switchCount=0;
+		compareCount=0;
+        doQuickSort(0, array.length - 1);
+        results(startTime);
+        assert(validate());
+    }
+
+    private void doQuickSort(int startPosition, int lastPosition) {
+        if (startPosition >= lastPosition) {
+        	compareCount++;
+            return;
+        }
+        int tempStartPosition = startPosition, tempLastPosition = lastPosition;
+        int currentPosition = tempStartPosition - (tempStartPosition - tempLastPosition) / 2;
+        while (tempStartPosition < tempLastPosition) {
+            while (tempStartPosition < currentPosition && (array[tempStartPosition] <= array[currentPosition])) {
+            	tempStartPosition++;
+            }
+            while (tempLastPosition > currentPosition && (array[currentPosition] <= array[tempLastPosition])) {
+            	tempLastPosition--;
+            }
+            if (tempStartPosition < tempLastPosition) {
+                int temp = array[tempStartPosition];
+                array[tempStartPosition] = array[tempLastPosition];
+                array[tempLastPosition] = temp;
+                switchCount++;
+                if (tempStartPosition == currentPosition)
+                	currentPosition = tempLastPosition;
+                else if (tempLastPosition == currentPosition)
+                	currentPosition = tempStartPosition;
+                compareCount++;
+            }
+            compareCount++;
+        }
+        doQuickSort(startPosition, currentPosition);
+        doQuickSort(currentPosition + 1, lastPosition);
+    }
 }

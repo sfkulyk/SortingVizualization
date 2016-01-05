@@ -1,20 +1,19 @@
-
 import java.util.Arrays;
 
 public class ArrayUtils {
 	final private int[] array;
 	final private int[] sortedArray;
-	long switchCount, compareCount, time;
+	long switchCount, compareCount, timeAmount;
  
 	public ArrayUtils(int[] array) {
-		this.array = array;
+		this.array = Arrays.copyOf(array,array.length);
 		this.sortedArray=Arrays.copyOf(array,array.length);     
 		Arrays.sort(sortedArray);
 	}
  
 	void results(String text)
 	{
-		System.out.println(String.format("%-40s Compares: %, 12d, Switches: %, 12d, Time: %, 12d", text, compareCount, switchCount, time));
+		System.out.println(String.format("%-35s Compares: %, 15d, Switches: %, 15d, Time: %, 15d", text, compareCount, switchCount, timeAmount));
 	}
 	
 	boolean validate() 
@@ -34,7 +33,7 @@ public class ArrayUtils {
 		int temp;
 		switchCount=0;
 		compareCount=0;
-		time = System.nanoTime();  
+		timeAmount = System.nanoTime();  
   
 		for (maxPosition=array.length - 1; maxPosition >= 0;maxPosition--)
 		{
@@ -49,7 +48,7 @@ public class ArrayUtils {
 				}
 			}
 		}
-		time = System.nanoTime() - time;
+		timeAmount = System.nanoTime() - timeAmount;
 		assert(validate());
 		return;
 	}
@@ -63,7 +62,7 @@ public class ArrayUtils {
 		int temp;
 		switchCount = 0;
 		compareCount = 0;
-		time = System.nanoTime();
+		timeAmount = System.nanoTime();
 		
 		for (maxPosition = array.length - 1; maxPosition >= 0; minPosition++)
 		{
@@ -95,24 +94,24 @@ public class ArrayUtils {
 				compareCount+=3;
 			}
 			if (!changed) {
-				time=System.nanoTime()-time;
+				timeAmount=System.nanoTime()-timeAmount;
 				assert(validate());
 				return;
 			}
 			compareCount++;
 			maxPosition = changedMaxPosition;
 		}
-		time=System.nanoTime()-time;
+		timeAmount=System.nanoTime()-timeAmount;
 		assert(validate());
 		return;
 	}
 
     public void quickSort() {
-    	time = System.nanoTime();
+    	timeAmount = System.nanoTime();
 		switchCount = 0;
 		compareCount = 0;
         doQuickSort(0, array.length - 1);
-        time = System.nanoTime() - time;
+        timeAmount = System.nanoTime() - timeAmount;
         assert(validate());
     }
 

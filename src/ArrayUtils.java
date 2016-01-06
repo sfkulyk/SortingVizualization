@@ -18,13 +18,9 @@ public class ArrayUtils {
 	
 	boolean validate() 
 	{
-		for (int i = 1; i < array.length; ++i) {
-			if (array[i] != sortedArray[i]) {
-				System.out.println(Arrays.toString(array));
-				return false;
-			}
-		}
-		return true;
+		if (Arrays.equals(array,sortedArray))
+				return true;
+		return false;
 	}
  
 	public void sortBubbleClassic() {
@@ -106,7 +102,14 @@ public class ArrayUtils {
 		return;
 	}
 
-    public void quickSort() {
+	public void javaQuickSort() {
+    	timeAmount = System.nanoTime();
+    	Arrays.sort(array);
+		timeAmount = System.nanoTime() - timeAmount;
+        assert(validate());
+    }
+
+	public void quickSort() {
     	timeAmount = System.nanoTime();
 		switchCount = 0;
 		compareCount = 0;
